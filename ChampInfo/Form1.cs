@@ -21,6 +21,7 @@ namespace ChampInfo
 		{
 			Connectorclass grabChampion =  new Connectorclass(1);
 			var champion = grabChampion.GetChampDTO();
+            NameLabel.Text = champion.Name;   
 			SpellQ.Text = champion.Spells[0].Name;
 			SpellW.Text = champion.Spells[1].Name;
 			SpellE.Text = champion.Spells[2].Name;
