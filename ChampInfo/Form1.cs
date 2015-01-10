@@ -19,14 +19,14 @@ namespace ChampInfo
 
 		private void ConnectButton_Click(object sender, EventArgs e)
 		{
-			Connectorclass grabChampion =  new Connectorclass(2);
+			Connectorclass grabChampion =  new Connectorclass(Convert.ToInt32(textBox1.Text));
 			var champion = grabChampion.GetChampDTO();
             NameLabel.Text = champion.Name;   
 			SpellQ.Text = champion.Spells[0].Name;
 			SpellW.Text = champion.Spells[1].Name;
 			SpellE.Text = champion.Spells[2].Name;
 			SpellR.Text = champion.Spells[3].Name;
-			var cleanQTooltip = champion.Spells[0].SanitizedTooltip.Replace("{{ e1 }}", getBasedmg(champion, 0)).Replace("{{ a1 }}",getScaling(champion,0));
+			var cleanQTooltip = champion.Spells[0].SanitizedTooltip.Replace("{{ e1 }}", getBasedmg(champion, 0)).Replace("{{ a1 }}", getScaling(champion,0));
 			var cleanWTooltip = champion.Spells[1].SanitizedTooltip.Replace("{{ e1 }}", getBasedmg(champion, 1)).Replace("{{ a1 }}", getScaling(champion, 1));
 			var cleanETooltip = champion.Spells[2].SanitizedTooltip.Replace("{{ e1 }}", getBasedmg(champion, 2)).Replace("{{ a1 }}", getScaling(champion, 2));
 			QInfo.Text = cleanQTooltip;
@@ -37,11 +37,7 @@ namespace ChampInfo
 
 		private string getBasedmg(ChampDTO champion,int SpellSlot)
 		{
-			var returnstring = "";
-			foreach (var effect in champion.Spells[SpellSlot].Effect[1])
-			{
-				returnstring += effect.ToString() + "/";
-			}
+			var returnstring = champion.Spells[SpellSlot].Effect[1].Aggregate("", (current, effect) => current + (effect.ToString() + "/"));
 			returnstring = returnstring.Substring(0, returnstring.Length - 1);
 			return returnstring;
 		}
