@@ -16,7 +16,17 @@ namespace ChampInfo
 		{
 			InitializeComponent();
 		}
+		private enum Index
+		{
+			empty = 0,
+			e1 = 1,
+			e2 = 2,
+			e3 = 3,
+			e4 = 4,
+			e5 = 5,
+			e6 = 6
 
+		}
 		private void ConnectButton_Click(object sender, EventArgs e)
 		{
 			Connectorclass grabChampion =  new Connectorclass(Convert.ToInt32(textBox1.Text));
@@ -26,13 +36,34 @@ namespace ChampInfo
 			SpellW.Text = champion.Spells[1].Name;
 			SpellE.Text = champion.Spells[2].Name;
 			SpellR.Text = champion.Spells[3].Name;
-			var cleanQTooltip = champion.Spells[0].SanitizedTooltip.Replace("{{ e1 }}", getBasedmg(champion, 0)).Replace("{{ a1 }}", getScaling(champion,0));
-			var cleanWTooltip = champion.Spells[1].SanitizedTooltip.Replace("{{ e1 }}", getBasedmg(champion, 1)).Replace("{{ a1 }}", getScaling(champion, 1));
-			var cleanETooltip = champion.Spells[2].SanitizedTooltip.Replace("{{ e1 }}", getBasedmg(champion, 2)).Replace("{{ a1 }}", getScaling(champion, 2));
+			var cleanQTooltip = champion.Spells[0].SanitizedTooltip.Replace("{{ a1 }}", getScaling(champion, 0));
+			for (int i = 1; i <= 6; i++)
+			{
+				
+				cleanQTooltip = cleanQTooltip.Replace("{{ e" + i  + " }}", getEInfo(champion, 0,i));
+			}
+			var cleanWTooltip = champion.Spells[1].SanitizedTooltip.Replace("{{ a1 }}", getScaling(champion, 0));
+			for (int i = 1; i <= 6; i++)
+			{
+				
+				cleanWTooltip = cleanWTooltip.Replace("{{ e" + i  + " }}", getEInfo(champion, 1,i));
+			}
+			var cleanETooltip = champion.Spells[2].SanitizedTooltip.Replace("{{ a1 }}", getScaling(champion, 0));
+			for (int i = 1; i <= 6; i++)
+			{
+				
+				cleanETooltip = cleanETooltip.Replace("{{ e" + i  + " }}", getEInfo(champion, 2,i));
+			}
+			var cleanRTooltip = champion.Spells[3].SanitizedTooltip.Replace("{{ a1 }}", getScaling(champion, 0));
+			for (int i = 1; i <= 6; i++)
+			{
+
+				cleanRTooltip = cleanRTooltip.Replace("{{ e" + i + " }}", getEInfo(champion, 3, i));
+			}
 			QInfo.Text = cleanQTooltip;
 			WInfo.Text = cleanWTooltip;
 			EInfo.Text = cleanETooltip;
-			//RInfo.Text = tooltip[3];*/
+			RInfo.Text = cleanRTooltip;
 		}
 
 		private string getBasedmg(ChampDTO champion,int SpellSlot)
@@ -62,6 +93,19 @@ namespace ChampInfo
 			
 			returnstring = returnstring.Substring(0, returnstring.Length - 1);
 			return returnstring;
+		}
+		private string getEInfo(ChampDTO champion, int SpellSlot, int position)
+		{
+			var returnstring = "";
+			var effect = champion.Spells[SpellSlot];
+			try
+			{
+				return effect.EffectBurn[(int)position];
+			}
+			catch (Exception e)
+			{
+				return "";
+			}
 		}
 	}
 }
