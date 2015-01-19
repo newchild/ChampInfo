@@ -36,34 +36,62 @@ namespace ChampInfo
 			SpellW.Text = champion.Spells[1].Name;
 			SpellE.Text = champion.Spells[2].Name;
 			SpellR.Text = champion.Spells[3].Name;
-			var cleanQTooltip = champion.Spells[0].SanitizedTooltip.Replace("{{ a1 }}", getScaling(champion, 0));
-			for (int i = 1; i <= 6; i++)
+			var cleanQTooltip = champion.Spells[0].SanitizedTooltip;
+			for (int i = 1; i <= 9; i++)
 			{
 				
 				cleanQTooltip = cleanQTooltip.Replace("{{ e" + i  + " }}", getEInfo(champion, 0,i));
 			}
-			var cleanWTooltip = champion.Spells[1].SanitizedTooltip.Replace("{{ a1 }}", getScaling(champion, 0));
-			for (int i = 1; i <= 6; i++)
+			for (int i = 1; i <= 9; i++)
+			{
+
+				cleanQTooltip = cleanQTooltip.Replace("{{ a" + i + " }}", getAInfo(champion, 0, "a" + i));
+			}
+			var cleanWTooltip = champion.Spells[1].SanitizedTooltip;
+			for (int i = 1; i <= 9; i++)
 			{
 				
 				cleanWTooltip = cleanWTooltip.Replace("{{ e" + i  + " }}", getEInfo(champion, 1,i));
 			}
-			var cleanETooltip = champion.Spells[2].SanitizedTooltip.Replace("{{ a1 }}", getScaling(champion, 0));
-			for (int i = 1; i <= 6; i++)
+			for (int i = 1; i <= 9; i++)
+			{
+
+				cleanWTooltip = cleanWTooltip.Replace("{{ a" + i + " }}", getAInfo(champion, 1, "a" + i));
+			}
+			var cleanETooltip = champion.Spells[2].SanitizedTooltip;
+			for (int i = 1; i <= 9; i++)
 			{
 				
 				cleanETooltip = cleanETooltip.Replace("{{ e" + i  + " }}", getEInfo(champion, 2,i));
 			}
-			var cleanRTooltip = champion.Spells[3].SanitizedTooltip.Replace("{{ a1 }}", getScaling(champion, 0));
-			for (int i = 1; i <= 6; i++)
+			for (int i = 1; i <= 9; i++)
+			{
+
+				cleanETooltip = cleanETooltip.Replace("{{ a" + i + " }}", getAInfo(champion, 2, "a" + i));
+			}
+			var cleanRTooltip = champion.Spells[3].SanitizedTooltip;
+			for (int i = 1; i <= 9; i++)
 			{
 
 				cleanRTooltip = cleanRTooltip.Replace("{{ e" + i + " }}", getEInfo(champion, 3, i));
+			}
+			for (int i = 1; i <= 9; i++)
+			{
+
+				cleanRTooltip = cleanRTooltip.Replace("{{ a" + i + " }}", getAInfo(champion, 3, "a" + i));
 			}
 			QInfo.Text = cleanQTooltip;
 			WInfo.Text = cleanWTooltip;
 			EInfo.Text = cleanETooltip;
 			RInfo.Text = cleanRTooltip;
+			QInfo.Text += "  Range: " + champion.Spells[0].RangeBurn;
+			WInfo.Text += "  Range: " + champion.Spells[1].RangeBurn;
+			EInfo.Text += "  Range: " + champion.Spells[2].RangeBurn;
+			RInfo.Text += "  Range: " + champion.Spells[3].RangeBurn;
+			QInfo.Text += " Cost: " + champion.Spells[0].CostBurn + " " + champion.Spells[0].CostType;
+			WInfo.Text += " Cost: " + champion.Spells[1].CostBurn + " " + champion.Spells[1].CostType;
+			EInfo.Text += " Cost: " + champion.Spells[2].CostBurn + " " + champion.Spells[2].CostType;
+			RInfo.Text += " Cost: " + champion.Spells[3].CostBurn + " " + champion.Spells[3].CostType;
 		}
 
 		private string getBasedmg(ChampDTO champion,int SpellSlot)
@@ -72,26 +100,36 @@ namespace ChampInfo
 			returnstring = returnstring.Substring(0, returnstring.Length - 1);
 			return returnstring;
 		}
-		private string getScaling(ChampDTO champion, int SpellSlot)
+		private string getAInfo(ChampDTO champion, int SpellSlot, string key)
 		{
 			var returnstring = "";
-			Var effect2;
 			var effect = champion.Spells[SpellSlot];
+			if (effect.Vars == null)
+			{
+				return "false Information";
+			}
+			foreach (var variable in effect.Vars)
+			{
+				
+				if (variable.Key == key)
+				{
+					foreach (var helpervar in variable.Coeff)
+					{
+						returnstring += Convert.ToDecimal(helpervar).ToString() + "/";
+					}
+				}
+				
+			}
+
+
 			try
 			{
-				effect2 = effect.Vars[0];
+				returnstring = returnstring.Substring(0, returnstring.Length - 1);
 			}
 			catch (Exception e)
 			{
-				return "";
+				returnstring = "";
 			}
-			foreach (var variable in effect2.Coeff)
-			{
-				returnstring += Convert.ToDecimal(variable).ToString() + "/";
-			}
-				
-			
-			returnstring = returnstring.Substring(0, returnstring.Length - 1);
 			return returnstring;
 		}
 		private string getEInfo(ChampDTO champion, int SpellSlot, int position)
