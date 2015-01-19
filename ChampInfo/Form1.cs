@@ -5,6 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+using System.Web.Optimization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -144,6 +150,15 @@ namespace ChampInfo
 			{
 				return "";
 			}
+		}
+
+		private void Form1_Load(object sender, EventArgs e)
+		{
+			JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+			{
+				Formatting = Formatting.Indented,
+				ContractResolver = new CamelCasePropertyNamesContractResolver()
+			};
 		}
 	}
 }

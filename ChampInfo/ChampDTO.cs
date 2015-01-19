@@ -12,28 +12,28 @@ namespace ChampInfo
     public class ChampDTO
     {
 
-        [JsonProperty("id")]
+      
         public int Id { get; set; }
 
-        [JsonProperty("key")]
+
         public string Key { get; set; }
 
-        [JsonProperty("name")]
+
         public string Name { get; set; }
 
-        [JsonProperty("title")]
+
         public string Title { get; set; }
 
-        [JsonProperty("blurb")]
+
         public string Blurb { get; set; }
 
-        [JsonProperty("tags")]
+
         public string[] Tags { get; set; }
 
-        [JsonProperty("info")]
+
         public Info Info { get; set; }
 
-        [JsonProperty("spells")]
+
         public Spell[] Spells { get; set; }
     }
 

@@ -12,10 +12,9 @@ namespace ChampInfo
     public class Leveltip
     {
 
-        [JsonProperty("label")]
+
         public string[] Label { get; set; }
 
-        [JsonProperty("effect")]
         public string[] Effect { get; set; }
     }
 
